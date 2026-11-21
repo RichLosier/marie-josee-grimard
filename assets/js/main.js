@@ -114,7 +114,7 @@
         onEnter: () => gsap.to(o, { v: n, duration: 2.2, ease: 'power3.out', onUpdate: () => { el.textContent = Math.round(o.v); } }),
       });
     });
-    $$('[data-price]', scope).forEach((el) => {
+    $$('.feat__price [data-price], .pbox [data-price]', scope).forEach((el) => {
       if (REDUCE) return;
       const n = +el.dataset.price, orig = el.textContent;
       const nf = new Intl.NumberFormat(FR ? 'fr-CA' : 'en-US');
