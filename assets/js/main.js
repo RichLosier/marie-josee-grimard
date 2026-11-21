@@ -192,7 +192,7 @@
       lastY = y;
       const bar = $('#rail-b'), num = $('#rail-n'), ru = $('.rail-ui');
       if (ru) ru.style.opacity = y > innerHeight * 0.8 && self.progress < 0.975 ? 1 : 0;
-      if (bar) bar.style.transform = `scaleX(${self.progress.toFixed(4)})`;
+      if (bar) bar.style.transform = `scaleY(${self.progress.toFixed(4)})`;
       if (num) num.textContent = String(Math.round(self.progress * 100)).padStart(2, '0');
     },
   });
@@ -673,6 +673,10 @@
     pageMM = gsap.matchMedia();
     root.dataset.ns = ns;
     if (nav) nav.dataset.here = labelFor(ns, page.dataset.title);
+    if (page.dataset.other) {
+      const oh = new URL(page.dataset.other, location.href).href;
+      $$('.nav__lang, .sheet__lang').forEach((a) => a.setAttribute('href', oh));
+    }
     $$('[data-nav]').forEach((a) => { const cur = { dest: 'dests', project: 'projects' }[ns] || ns; if (a.dataset.nav === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     initSplits(page);
     initCounters(page);
@@ -702,7 +706,7 @@
       if (REDUCE) return res();
       curtain.style.visibility = 'visible'; cLabel.textContent = label || '';
       const tl = gsap.timeline({ onComplete: res });
-      tl.fromTo(blades, { yPercent: 101 }, { yPercent: 0, duration: 0.85, ease: 'power4.inOut', stagger: 0.07 }, 0);
+      tl.fromTo(blades, { yPercent: 101 }, { yPercent: 0, duration: 0.72, ease: 'power4.inOut', stagger: 0.055 }, 0);
       tl.fromTo(cLabel, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out' }, 0.5);
     });
   }
@@ -711,7 +715,7 @@
       if (REDUCE) return res();
       const tl = gsap.timeline({ onComplete: () => { curtain.style.visibility = 'hidden'; gsap.set(blades, { yPercent: 101 }); res(); } });
       tl.to(cLabel, { opacity: 0, y: -24, duration: 0.45, ease: 'power2.in' }, 0);
-      tl.to(blades, { yPercent: -101, duration: 0.85, ease: 'power4.inOut', stagger: 0.07 }, 0.2);
+      tl.to(blades, { yPercent: -101, duration: 0.72, ease: 'power4.inOut', stagger: 0.055 }, 0.15);
     });
   }
   async function go(url, label, push = true) {
@@ -733,6 +737,7 @@
       old.replaceWith(document.adoptNode(next));
       document.body.dataset.dest = next.dataset.dest || ''; if (!next.dataset.dest) delete document.body.dataset.dest;
       window.scrollTo(0, 0); lenis && lenis.scrollTo(0, { immediate: true, force: true });
+      if (nav) nav.classList.remove('is-hidden');
       // ScrollTrigger global de navigation (recréé car tué)
       bindGlobalTriggers();
       initPage(true);
@@ -749,7 +754,7 @@
         if (nav) nav.classList.toggle('is-hidden', y > 600 && self.direction === 1 && !sheetOpen);
         const bar = $('#rail-b'), num = $('#rail-n'), ru = $('.rail-ui');
         if (ru) ru.style.opacity = y > innerHeight * 0.8 && self.progress < 0.975 ? 1 : 0;
-        if (bar) bar.style.transform = `scaleX(${self.progress.toFixed(4)})`;
+        if (bar) bar.style.transform = `scaleY(${self.progress.toFixed(4)})`;
         if (num) num.textContent = String(Math.round(self.progress * 100)).padStart(2, '0');
       },
     });
