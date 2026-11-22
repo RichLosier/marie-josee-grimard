@@ -111,19 +111,7 @@
       const o = { v: 0 };
       ScrollTrigger.create({
         trigger: el, start: 'top 90%', once: true,
-        onEnter: () => gsap.to(o, { v: n, duration: 2.2, ease: 'power3.out', onUpdate: () => { el.textContent = Math.round(o.v); } }),
-      });
-    });
-    $$('.feat__price [data-price], .pbox [data-price]', scope).forEach((el) => {
-      if (REDUCE) return;
-      const n = +el.dataset.price, orig = el.textContent;
-      const nf = new Intl.NumberFormat(FR ? 'fr-CA' : 'en-US');
-      const o = { v: 0 };
-      const render = (v) => { el.textContent = orig.replace(/[\d.,  \s]+/, (m) => nf.format(Math.round(v)).replace(/ /g, ' ') + (/\s$/.test(m) ? ' ' : '')); };
-      render(0);
-      ScrollTrigger.create({
-        trigger: el, start: 'top 92%', once: true,
-        onEnter: () => gsap.to(o, { v: n, duration: 2.4, ease: 'power3.out', onUpdate: () => render(o.v), onComplete: () => { el.textContent = orig; } }),
+        onEnter: () => gsap.to(o, { v: n, duration: 1.1, ease: 'power3.out', onUpdate: () => { el.textContent = Math.round(o.v); }, onComplete: () => { el.textContent = n; } }),
       });
     });
   }
@@ -216,7 +204,9 @@
   function initSticky() {
     if (!sticky) return;
     const target = $('.ctaband') || $('#foot');
+    ScrollTrigger.create({ start: () => innerHeight * 0.9, end: 'max', onToggle: (self) => sticky.classList.toggle('is-gone', !self.isActive) });
     sticky.classList.remove('is-hidden');
+    sticky.classList.add('is-gone');
     if (!target) return;
     ScrollTrigger.create({
       trigger: target, start: 'top 85%', end: 'bottom bottom',
@@ -469,11 +459,11 @@
       const sp = +el.dataset.speed || 1;
       const f = $('.mo__f, .gs__f, .gi__f', el);
       if (f && !f.closest('.gi')) {
-        gsap.to(f, { clipPath: 'inset(0 0 0% 0 round 16px)', duration: 1.5, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+        gsap.to(f, { clipPath: 'inset(0 0 0% 0 round 16px)', duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 118%', once: true } });
         const im = $('img', f);
         gsap.fromTo(im, { yPercent: -9, scale: 1.18 }, { yPercent: 9, scale: 1.18, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
       } else if (f) {
-        gsap.from(f, { clipPath: 'inset(0 0 100% 0 round 16px)', duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true } });
+        gsap.from(f, { clipPath: 'inset(0 0 100% 0 round 16px)', duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 118%', once: true } });
       }
       if (wide()) gsap.fromTo(el, { y: (sp - 1) * 90 }, { y: -(sp - 1) * 90, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
@@ -484,6 +474,7 @@
     });
     $$('.rail__track .card', scope).forEach((c, i) => gsap.from(c, { x: 80, opacity: 0, duration: 1.2, delay: i * 0.05, ease: 'expo.out', clearProps: 'transform,opacity', scrollTrigger: { trigger: '#rail-track', start: 'top 90%', once: true } }));
     $$('.amen li, .loc__l li', scope).forEach((li, i) => gsap.from(li, { opacity: 0, y: 26, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: li, start: 'top 94%', once: true } }));
+    $$('#feat, #rail, .grid--cat', scope).forEach((sec) => ScrollTrigger.create({ trigger: sec, start: 'top 60%', end: 'bottom 40%', onToggle: (self) => { const ru = $('.rail-ui'); if (ru) ru.classList.toggle('is-off', self.isActive); } }));
     $$('.foot__name', scope).forEach((n) => gsap.fromTo(n, { yPercent: 16 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#foot', start: 'top bottom', end: 'bottom bottom', scrub: true } }));
     $$('.dhero__media, .phero__media', scope).forEach((m) => gsap.to(m, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: m.parentElement, start: 'top top', end: 'bottom top', scrub: true } }));
     $$('.dhero__t, .phero__t', scope).forEach((m) => gsap.to(m, { yPercent: -18, ease: 'none', scrollTrigger: { trigger: m.parentElement, start: 'top top', end: 'bottom top', scrub: true } }));
