@@ -287,6 +287,7 @@
           body += '\n\n' + (FR ? 'Mon courriel : ' : 'My email: ') + fd.get('email');
         }
         location.href = `mailto:${f.dataset.to}?subject=${encodeURIComponent(f.dataset.subject || '')}&body=${encodeURIComponent(body)}`;
+        const fb = $('[data-fallback]', f); if (fb) setTimeout(() => { fb.hidden = false; }, 1200); // aucune application de courriel ouverte : l’adresse et la réservation restent à portée
       });
     });
     const p = new URLSearchParams(location.search).get('p');
@@ -730,6 +731,7 @@
     $$('[data-scrollto]', page).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); const t = $(a.getAttribute('href')); t && scrollTo(t); }));
     revealHeroChars(page, entry ? delay : 0);
     requestAnimationFrame(() => ScrollTrigger.refresh());
+    document.dispatchEvent(new CustomEvent('mjg:page', { detail: { entry: !!entry } }));
     listen(window, 'resize', () => { clearTimeout(initPage._t); initPage._t = setTimeout(() => ScrollTrigger.refresh(), 250); });
   }
   function labelFor(ns, title) { const t = (title || '').split(' — ')[0]; return ns === 'home' ? 'Marie-Josée Grimard' : t; }

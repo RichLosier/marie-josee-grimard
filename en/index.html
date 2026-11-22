@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="../assets/css/site.css?v=1">
 <noscript><style>.ch>span{transform:none!important}[data-split]{visibility:visible!important}.hero__kicker,.hero__foot,.hero__clocks,.dhero__k,.dhero__lead,.dhero__foot,.phero__k,.phero__tag,.phero__back{opacity:1!important}.loader{display:none}.mi{opacity:1;transform:none}.manifesto__text .w{color:#0F1613}</style></noscript>
 <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('mjg-seen'))document.documentElement.classList.add('seen')}catch(e){}</script>
+<script>window.MJG_TRACK={"v":"2026-11-22","ph":{"key":"","host":"https://eu.i.posthog.com"},"cl":{"id":""},"meta":{"pixel":"","capi":""},"cal":{"popup":true},"debug":false};</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -152,11 +153,12 @@
       <a class="foot__l foot__l--sm" href="https://www.facebook.com/mariejosee.grimard/" target="_blank" rel="noopener">Facebook</a>
     </div>
     <div class="foot__col">
-      <p class="eyebrow">Write to Marie-Josée</p><form class="mailform" data-mailform data-to="mariejoseegrimard@sunsetrealestate.ca" data-subject="Information request" data-body="Hello Marie-Josée, I would like to receive information about your projects." data-wcw="newsletter">
+      <p class="eyebrow">Write to Marie-Josée</p><form class="mailform" data-mailform data-clarity-mask="True" data-to="mariejoseegrimard@sunsetrealestate.ca" data-subject="Information request" data-body="Hello Marie-Josée, I would like to receive information about your projects." data-wcw="newsletter">
         <label class="mailform__l" for="nl-home">Your email</label>
         <div class="mailform__row"><input id="nl-home" name="email" type="email" required autocomplete="email" placeholder="name@example.com">
         <button class="btn btn--ink btn--sm" type="submit"><span class="btn__t">Send</span><span class="btn__i"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></span></button></div>
         <p class="mailform__n">This form opens your email app: nothing is stored on this site.</p>
+        <p class="mailform__fb" data-fallback hidden>Your email app did not open? Write to <a href="mailto:mariejoseegrimard@sunsetrealestate.ca">mariejoseegrimard@sunsetrealestate.ca</a> · <a href="https://calendly.com/mariejoseegrimard/immobiliersud" target="_blank" rel="noopener">or book a call</a></p>
       </form>
       <nav class="foot__nav" aria-label="Footer">
         <a href="../en/destinations/">Destinations</a><a href="../en/projects/">Projects</a>
@@ -166,12 +168,13 @@
     </div>
   </div>
   <div class="foot__name" aria-hidden="true"><span>Marie-Josée</span> <em>Grimard</em></div>
-  <div class="foot__legal"><span>Marie-Josée Grimard, international real estate broker, Sunset Real Estate.</span><span>Images are developers’ official renders. Starting prices to be confirmed.</span></div>
+  <div class="foot__legal"><span>Marie-Josée Grimard, international real estate broker, Sunset Real Estate.</span><span>Images are developers’ official renders. Starting prices to be confirmed.</span><button type="button" class="foot__prefs" data-consent-open hidden>Manage my preferences</button></div>
 </footer>
 </div>
 <script src="../vendor/gsap.min.js"></script>
 <script src="../vendor/ScrollTrigger.min.js"></script>
 <script src="../vendor/lenis.min.js"></script>
+<script src="../assets/js/track.js?v=1" data-privacy="../en/privacy/" defer></script>
 <script src="../assets/js/main.js?v=1" data-root="../" data-lang="en" defer></script>
 </body>
 </html>
