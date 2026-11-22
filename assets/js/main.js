@@ -447,6 +447,13 @@
     if (phone && !REDUCE) {
       gsap.fromTo(phone, { y: 140, rotate: 7, opacity: 0 }, { y: 0, rotate: 0, opacity: 1, duration: 1.7, ease: 'expo.out', scrollTrigger: { trigger: phone, start: 'top 88%', once: true } });
       gsap.to(phone, { yPercent: -7, ease: 'none', scrollTrigger: { trigger: phone, start: 'top bottom', end: 'bottom top', scrub: true } });
+      if (FINE) {
+        gsap.set(phone, { transformPerspective: 900 });
+        const ry = gsap.quickTo(phone, 'rotationY', { duration: 0.9, ease: 'power3' }), rx = gsap.quickTo(phone, 'rotationX', { duration: 0.9, ease: 'power3' });
+        const sec = phone.closest('.vert') || phone.parentElement;
+        listen(sec, 'pointermove', (e) => { const r = phone.getBoundingClientRect(); ry(clamp(((e.clientX - (r.left + r.width / 2)) / innerWidth) * -42, -22, 22)); rx(clamp(((e.clientY - (r.top + r.height / 2)) / innerHeight) * 26, -14, 14)); });
+        listen(sec, 'pointerleave', () => { ry(0); rx(0); });
+      }
     }
     $$('[data-film-open]', scope).forEach((b) => b.addEventListener('click', () => b.dataset.src && openFilm(b.dataset.src)));
 
