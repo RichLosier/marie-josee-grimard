@@ -747,3 +747,6 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px soli
 }
 
 .feat--sticky .feat__pin{position:sticky;top:0;height:100svh;min-height:0}
+
+/* curseur personnalisé coupé (2026-11-22) */
+.cursor{display:none!important}

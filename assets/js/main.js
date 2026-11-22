@@ -20,7 +20,8 @@
   gsap.registerPlugin(ScrollTrigger);
   gsap.config({ nullTargetWarn: false });
   root.classList.add(REDUCE ? 'no-motion' : 'is-motion');
-  if (FINE && !REDUCE) root.classList.add('has-cursor');
+  const CURSOR_FX = false; /* curseur personnalisé coupé (Richard, 2026-11-22) : passer à true pour le remettre */
+  if (CURSOR_FX && FINE && !REDUCE) root.classList.add('has-cursor');
 
   /* ----------------------------------------------------------- défilement (Lenis) */
   let lenis = null;
@@ -163,7 +164,7 @@
 
   /* ----------------------------------------------------------- curseur */
   const cursor = $('#cursor');
-  if (cursor && FINE && !REDUCE && innerWidth >= 1000) {
+  if (CURSOR_FX && cursor && FINE && !REDUCE && innerWidth >= 1000) {
     const cx = gsap.quickTo(cursor, 'x', { duration: 0.28, ease: 'power3' }), cy = gsap.quickTo(cursor, 'y', { duration: 0.28, ease: 'power3' });
     const label = $('#cursor-label');
     window.addEventListener('pointermove', (e) => { cx(e.clientX); cy(e.clientY); }, { passive: true });
