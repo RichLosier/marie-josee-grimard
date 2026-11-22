@@ -725,7 +725,7 @@
     requestAnimationFrame(() => ScrollTrigger.refresh());
     listen(window, 'resize', () => { clearTimeout(initPage._t); initPage._t = setTimeout(() => ScrollTrigger.refresh(), 250); });
   }
-  function labelFor(ns, title) { const t = (title || '').split(' — ')[0]; return ns === 'home' ? '' : t; }
+  function labelFor(ns, title) { const t = (title || '').split(' — ')[0]; return ns === 'home' ? 'Marie-Josée Grimard' : t; }
 
   /* ============================================================ TRANSITIONS DE PAGE */
   const curtain = $('#curtain'), blades = $$('#curtain i'), cLabel = $('#curtain-label');
@@ -814,8 +814,8 @@
     const o = { v: 0 };
     // préparer l’état initial du héros pendant le chargeur
     initPageLater();
-    gsap.to(o, { v: 100, duration: 1.5, ease: 'power2.inOut', onUpdate: () => { num.textContent = String(Math.round(o.v)).padStart(3, '0'); bar.style.transform = `scaleX(${o.v / 100})`; } });
-    gsap.to(loader, { yPercent: -100, duration: 0.95, ease: 'power4.inOut', delay: 1.7, onComplete: () => { loader.style.display = 'none'; gate(); } });
+    gsap.to(o, { v: 100, duration: 0.9, ease: 'power2.inOut', onUpdate: () => { num.textContent = String(Math.round(o.v)).padStart(3, '0'); bar.style.transform = `scaleX(${o.v / 100})`; } });
+    gsap.to(loader, { yPercent: -100, duration: 0.95, ease: 'power4.inOut', delay: 1.0, onComplete: () => { loader.style.display = 'none'; gate(); } });
     try { sessionStorage.setItem('mjg-seen', '1'); } catch (e) { /* noop */ }
     function initPageLater() { /* initialisation après le chargeur pour que le héros se révèle sous les yeux */ }
     function gate() { /* noop */ }

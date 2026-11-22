@@ -362,7 +362,7 @@ ul,ol{list-style:none}
 .foot__l:hover{background-size:100% 1.5px}
 .foot__nav{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin-top:1.6rem;font-size:.9rem;font-weight:600}
 .foot__nav a:hover{color:var(--flame)}
-.foot__name{font-family:var(--serif);font-size:clamp(3.4rem,20vw,29rem);line-height:.8;letter-spacing:-.05em;white-space:nowrap;padding:0 var(--pad);margin:0 0 -.05em;color:var(--ink);will-change:transform}
+.foot__name{font-family:var(--serif);font-size:clamp(3.4rem,25vw,29rem);line-height:.8;letter-spacing:-.05em;white-space:nowrap;padding:0 var(--pad);margin:0 0 -.05em;color:var(--ink);will-change:transform}
 .foot__name span,.foot__name em{display:block}.foot__name em{font-style:italic;padding-left:12vw}
 .foot__legal{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.4rem var(--pad) 0;font-size:.78rem;color:var(--mute)}
 .mailform{display:flex;flex-direction:column;gap:.6rem;width:100%;max-width:420px}
@@ -609,7 +609,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px soli
 }
 @media (max-width:800px){
   :root{--navh:62px}
-  body{padding-bottom:84px;font-size:1rem}
+  body{font-size:1rem}
   .nav{top:10px;width:calc(100% - 20px);justify-content:space-between;padding:5px 5px 5px 6px;left:50%}
   .nav__links,.nav__cta,.nav__lang{display:none}
   .nav__burger{display:block}
@@ -659,7 +659,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px soli
   .cbook,.cinfo,.cform{grid-column:1}
   .cform{grid-template-columns:1fr}.cform .eyebrow,.cform .note,.cform .fld:nth-of-type(4){grid-column:1}
   .foot__grid{grid-template-columns:1fr}.foot__col--lead{grid-column:1}
-  .foot__name{font-size:20vw}
+  .foot__name{font-size:25vw}
   .drow{grid-template-columns:2.4rem 1fr;gap:.6rem 1rem}
   .drow__n,.drow__t,.drow__l,.drow__m{grid-column:auto}
   .drow__n{grid-row:1}.drow__t{grid-column:2;grid-row:1;font-size:clamp(2.6rem,12vw,4.6rem)}
@@ -686,7 +686,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px soli
   .pnext__t,.pnext__a>span{grid-column:1}
   .pnext__a>.i{display:none}
   .lightbox__p{left:8px;top:auto;bottom:18px}.lightbox__n{right:8px;top:auto;bottom:18px}
-  .fbar{margin:0 12px;padding:.5rem .6rem;position:sticky;top:calc(var(--navh) + 4px);border-radius:16px}
+  .fbar{margin:0 12px;padding:.5rem .6rem;position:relative;border-radius:16px}
   .fbar__open{display:inline-flex}
   .fbar__tools{margin-left:0;width:100%;justify-content:space-between}
   .vt__b{padding:.55rem .8rem}
@@ -731,3 +731,13 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px soli
 .sheet__cta{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 1.6rem;border-radius:999px;background:var(--flame);color:#fff!important;font-weight:700;margin-bottom:1rem}
 .phead--tight{padding-top:calc(var(--navh) + clamp(2rem,5vw,3.5rem));padding-bottom:clamp(1rem,2vw,1.6rem)}
 .phead--tight .display{font-size:clamp(3rem,8.5vw,8rem)}
+
+.card__go--ask{width:auto;border-radius:999px;padding:0 1rem;font:700 .72rem var(--sans);letter-spacing:.08em;text-transform:uppercase;background:#fff;color:var(--ink);border:1px solid #000}
+.card:hover .card__go--ask{transform:none;background:var(--ink);color:#fff}
+.hero__name{filter:drop-shadow(0 6px 28px rgba(0,0,0,.32))}
+.mailform[hidden]{display:none}
+@media (max-width:800px){
+  .foot__l,.foot__nav a{min-height:44px;display:inline-flex;align-items:center}
+  .hero__slide{min-height:40px}
+  .gl__hint{bottom:-.6rem}
+}
