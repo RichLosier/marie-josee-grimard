@@ -18,6 +18,7 @@
 
   if (!window.gsap) return;
   gsap.registerPlugin(ScrollTrigger);
+  gsap.config({ nullTargetWarn: false });
   root.classList.add(REDUCE ? 'no-motion' : 'is-motion');
   if (FINE && !REDUCE) root.classList.add('has-cursor');
 
@@ -116,6 +117,30 @@
     });
   }
 
+  /* ----------------------------------------------------------- globe 3D des routes */
+  let globeInst = null;
+  let railHold = 0;
+  function initGlobe(scope) {
+    const gEl = $('.gl[data-globe]', scope);
+    if (!gEl) return;
+    const fail = () => gEl.parentElement.classList.add('no-globe');
+    if (REDUCE) { fail(); return; }
+    const col = {};
+    $$('.gl__lab[data-k]', gEl).forEach((l) => { col[l.dataset.k] = getComputedStyle(l).getPropertyValue('--dest').trim(); });
+    const boot = () => import(ABS_ROOT + 'assets/js/globe.js')
+      .then((m) => m.createGlobe({ el: gEl, root: ABS_ROOT, gsap, reduce: REDUCE, colors: col }))
+      .then((g) => {
+        if (!g) { fail(); return; }
+        globeInst = g; document.documentElement.classList.add('has-globe');
+        const on = $('.dp.is-on', scope);
+        g.setActive((on && on.dataset.k) || gEl.dataset.active || 'dr');
+        onCleanup(() => { g.destroy(); globeInst = null; document.documentElement.classList.remove('has-globe'); });
+      })
+      .catch(fail);
+    const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { io.disconnect(); boot(); } }, { rootMargin: '600px' });
+    io.observe(gEl.parentElement); onCleanup(() => io.disconnect());
+  }
+
   /* ----------------------------------------------------------- boutons magnétiques, inclinaison des cartes */
   function initMicro(scope) {
     if (!FINE || REDUCE) return;
@@ -204,7 +229,7 @@
   function initSticky() {
     if (!sticky) return;
     const target = $('.ctaband') || $('#foot');
-    ScrollTrigger.create({ start: () => innerHeight * 0.9, end: 'max', onToggle: (self) => sticky.classList.toggle('is-gone', !self.isActive) });
+    ScrollTrigger.create({ start: () => innerHeight * 0.9, end: 'max', onUpdate: (self) => sticky.classList.toggle('is-gone', self.direction === 1), onLeaveBack: () => sticky.classList.add('is-gone') });
     sticky.classList.remove('is-hidden');
     sticky.classList.add('is-gone');
     if (!target) return;
@@ -383,20 +408,8 @@
         const v = $('video', p); if (v) { if (on && !REDUCE) { if (!v.src) { v.src = srcFor(v); v.load(); } v.play().then(() => v.classList.add('is-playing')).catch(() => {}); } else v.pause(); }
       });
       arcs.forEach((a) => a.classList.toggle('is-on', a.dataset.k === panels[i].dataset.k));
-      if (globe) globe.setActive(panels[i].dataset.k);
+      if (globeInst) globeInst.setActive(panels[i].dataset.k);
     };
-    // globe 3D des routes (après le chargement ; repli : la carte SVG)
-    let globe = null;
-    const gEl = $('#globe', scope);
-    if (gEl && !REDUCE) {
-      const color = (k) => getComputedStyle($('.dp[data-k=' + k + ']', scope)).getPropertyValue('--dest').trim();
-      const boot = () => import(ABS_ROOT + 'assets/js/globe.js')
-        .then((m) => m.createGlobe({ el: gEl, root: ABS_ROOT, gsap, reduce: REDUCE, colors: { dr: color('dr'), mx: color('mx'), pt: color('pt') } }))
-        .then((g) => { if (!g) return; globe = g; document.documentElement.classList.add('has-globe'); g.setActive(($('.dp.is-on', scope) || panels[0]).dataset.k); onCleanup(() => { g.destroy(); globe = null; document.documentElement.classList.remove('has-globe'); }); })
-        .catch(() => {});
-      const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { io.disconnect(); boot(); } }, { rootMargin: '600px' });
-      io.observe(gEl.parentElement); onCleanup(() => io.disconnect());
-    }
     setPanel(0);
     mm.add('(min-width: 801px) and (prefers-reduced-motion: no-preference)', () => {
       let idx = 0;
@@ -487,7 +500,7 @@
     });
     $$('.rail__track .card', scope).forEach((c, i) => gsap.from(c, { x: 80, opacity: 0, duration: 1.2, delay: i * 0.05, ease: 'expo.out', clearProps: 'transform,opacity', scrollTrigger: { trigger: '#rail-track', start: 'top 90%', once: true } }));
     $$('.amen li, .loc__l li', scope).forEach((li, i) => gsap.from(li, { opacity: 0, y: 26, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: li, start: 'top 94%', once: true } }));
-    $$('#feat, #rail, .grid--cat', scope).forEach((sec) => ScrollTrigger.create({ trigger: sec, start: 'top 60%', end: 'bottom 40%', onToggle: (self) => { const ru = $('.rail-ui'); if (ru) ru.classList.toggle('is-off', self.isActive); } }));
+    $$('#feat, #rail, .grid--cat', scope).forEach((sec) => ScrollTrigger.create({ trigger: sec, start: 'top 60%', end: 'bottom 40%', onToggle: (self) => { railHold += self.isActive ? 1 : -1; const ru = $('.rail-ui'); if (ru) ru.classList.toggle('is-off', railHold > 0); } }));
     $$('.foot__name', scope).forEach((n) => gsap.fromTo(n, { yPercent: 16 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#foot', start: 'top bottom', end: 'bottom bottom', scrub: true } }));
     $$('.dhero__media, .phero__media', scope).forEach((m) => gsap.to(m, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: m.parentElement, start: 'top top', end: 'bottom top', scrub: true } }));
     $$('.dhero__t, .phero__t', scope).forEach((m) => gsap.to(m, { yPercent: -18, ease: 'none', scrollTrigger: { trigger: m.parentElement, start: 'top top', end: 'bottom top', scrub: true } }));
@@ -551,6 +564,7 @@
       list.style.display = st.view === 'list' ? 'flex' : ''; list.style.flexDirection = 'column';
       count.textContent = (n === 1 ? data.n.one : data.n.many.replace('{n}', n));
       none.hidden = n !== 0;
+      const few = document.getElementById('few'); if (few) few.hidden = !(n > 0 && n <= 3);
       if (animate && !REDUCE) {
         let k = 0;
         target.forEach((el) => {
@@ -581,6 +595,7 @@
       $$('.chip[data-f=dest]', scope).forEach((c) => c.classList.toggle('is-on', c.dataset.v === st.dest));
     }
     syncChips();
+    const fr2 = document.getElementById('few-reset'); if (fr2) fr2.addEventListener('click', () => document.getElementById('freset').click());
     $('#freset').addEventListener('click', () => { Object.assign(st, { dest: '', city: '', type: '', status: '' }); $$('.chip', scope).forEach((c) => c.classList.toggle('is-on', !c.dataset.v)); syncChips(); apply(); });
     $('#fsort').addEventListener('change', (e) => { st.sort = e.target.value; apply(); });
     $$('.vt__b', scope).forEach((b) => b.addEventListener('click', () => {
@@ -691,6 +706,7 @@
     if (ns !== 'home') initParallax(page);
     initRailLabel(page);
     initSticky();
+    initGlobe(page);
     const delay = entry ? 0.1 : 0;
     if (ns === 'home') { pageHome(page, pageMM, entry); }
     else if (ns === 'projects') pageProjects(page);
