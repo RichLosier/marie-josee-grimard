@@ -383,7 +383,20 @@
         const v = $('video', p); if (v) { if (on && !REDUCE) { if (!v.src) { v.src = srcFor(v); v.load(); } v.play().then(() => v.classList.add('is-playing')).catch(() => {}); } else v.pause(); }
       });
       arcs.forEach((a) => a.classList.toggle('is-on', a.dataset.k === panels[i].dataset.k));
+      if (globe) globe.setActive(panels[i].dataset.k);
     };
+    // globe 3D des routes (après le chargement ; repli : la carte SVG)
+    let globe = null;
+    const gEl = $('#globe', scope);
+    if (gEl && !REDUCE) {
+      const color = (k) => getComputedStyle($('.dp[data-k=' + k + ']', scope)).getPropertyValue('--dest').trim();
+      const boot = () => import(ABS_ROOT + 'assets/js/globe.js')
+        .then((m) => m.createGlobe({ el: gEl, root: ABS_ROOT, gsap, reduce: REDUCE, colors: { dr: color('dr'), mx: color('mx'), pt: color('pt') } }))
+        .then((g) => { if (!g) return; globe = g; document.documentElement.classList.add('has-globe'); g.setActive(($('.dp.is-on', scope) || panels[0]).dataset.k); onCleanup(() => { g.destroy(); globe = null; document.documentElement.classList.remove('has-globe'); }); })
+        .catch(() => {});
+      const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { io.disconnect(); boot(); } }, { rootMargin: '600px' });
+      io.observe(gEl.parentElement); onCleanup(() => io.disconnect());
+    }
     setPanel(0);
     mm.add('(min-width: 801px) and (prefers-reduced-motion: no-preference)', () => {
       let idx = 0;
