@@ -451,7 +451,7 @@
         gsap.set(phone, { transformPerspective: 900 });
         const ry = gsap.quickTo(phone, 'rotationY', { duration: 0.9, ease: 'power3' }), rx = gsap.quickTo(phone, 'rotationX', { duration: 0.9, ease: 'power3' });
         const sec = phone.closest('.vert') || phone.parentElement;
-        listen(sec, 'pointermove', (e) => { const r = phone.getBoundingClientRect(); ry(clamp(((e.clientX - (r.left + r.width / 2)) / innerWidth) * -42, -22, 22)); rx(clamp(((e.clientY - (r.top + r.height / 2)) / innerHeight) * 26, -14, 14)); });
+        listen(sec, 'pointermove', (e) => { const r = phone.getBoundingClientRect(); ry(clamp(((e.clientX - (r.left + r.width / 2)) / innerWidth) * -70, -26, 26)); rx(clamp(((e.clientY - (r.top + r.height / 2)) / innerHeight) * 40, -18, 18)); });
         listen(sec, 'pointerleave', () => { ry(0); rx(0); });
       }
     }
@@ -636,6 +636,7 @@
       bar.hidden = sel.size === 0;
       slots.innerHTML = [...sel].map((id) => `<span style="background-image:url('${data.p[id].img}')" title="${data.p[id].name}"></span>`).join('');
       go.disabled = sel.size < 2; gt.textContent = data.n.cmp.replace('{n}', sel.size);
+      const hint = document.getElementById('cmp-hint'); if (hint) hint.textContent = sel.size >= 3 ? data.n.three : sel.size === 2 ? data.n.two : data.n.hint;
       if (!bar.hidden && !REDUCE) gsap.fromTo(bar, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'expo.out', overwrite: true });
     }
     cards.forEach((c) => $('.card__cmp', c).addEventListener('click', (e) => {
