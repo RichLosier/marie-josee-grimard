@@ -408,6 +408,7 @@
         const v = $('video', p); if (v) { if (on && !REDUCE) { if (!v.src) { v.src = srcFor(v); v.load(); } v.play().then(() => v.classList.add('is-playing')).catch(() => {}); } else v.pause(); }
       });
       arcs.forEach((a) => a.classList.toggle('is-on', a.dataset.k === panels[i].dataset.k));
+      const stg = document.getElementById('dests-stage'); if (stg) stg.dataset.on = i;
       if (globeInst) globeInst.setActive(panels[i].dataset.k);
     };
     setPanel(0);
@@ -434,8 +435,13 @@
     // vedette : défilement horizontal épinglé
     const track = $('#feat-track'), fpin = $('#feat-pin');
     mm.add('(min-width: 801px) and (prefers-reduced-motion: no-preference)', () => {
+      // défilement horizontal collé en CSS (sticky) : aucun passage en position fixe, donc aucun décalage de mise en page
+      const sec = fpin.parentElement;
       const dist = () => Math.max(0, track.scrollWidth - innerWidth + 0);
-      const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: fpin, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true } });
+      const size = () => { sec.style.height = (innerHeight + dist()) + 'px'; };
+      sec.classList.add('feat--sticky'); size();
+      const tw = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: sec, start: 'top top', end: 'bottom bottom', scrub: 0.7, invalidateOnRefresh: true, onRefreshInit: size } });
+      onCleanup(() => { sec.classList.remove('feat--sticky'); sec.style.height = ''; });
       $$('.fs__pic', track).forEach((pic) => gsap.fromTo(pic, { xPercent: -5 }, { xPercent: 5, ease: 'none', scrollTrigger: { trigger: pic.parentElement, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } }));
     });
     mm.add('(max-width: 800px)', () => {
